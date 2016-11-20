@@ -1,0 +1,28 @@
+---
+# defaults file for nextcloud
+
+  # Nextcloud database configuration (Currently only SQLlite and MySQL ist )
+  nextcloud_database_type: "sqlite"
+  nextcloud_database_name: "nextcloud"
+  nextcloud_database_host: "localhost"
+  nextcloud_database_user: "root"
+  nextcloud_database_pass: ""
+  nextcloud_database_prefix: "oc_"
+
+  # Nextcloud admin user data
+  nextcloud_admin_name: "admin"
+  nextcloud_admin_pass: "admin"
+
+  # Nextcloud folders
+  nextcloud_extract_dir: "/var/www"
+  nextcloud_data_dir: "{{ nextcloud_install_dir }}/data"
+
+  # Nextcloud Memory Cache (Currently only APC and APCu is Supported)
+  nextcloud_memcache: "APCu"
+
+  # Nextcloud download
+  nextcloud_version: "10.0.1"
+
+  # Webserver owner
+  nextcloud_http_user: "www-data"
+  nextcloud_http_group: "www-data"

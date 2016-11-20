@@ -1,0 +1,25 @@
+---
+  # vars file for nextcloud
+  nextcloud_archive_name: "nextcloud-{{ nextcloud_version }}.tar.bz2"
+  nextcloud_download_url: "https://download.nextcloud.com/server/releases/{{ nextcloud_archive_name }}"
+  nextcloud_install_dir: "{{ nextcloud_extract_dir }}/nextcloud"
+  # Nextcloud folders
+  nextcloud_folders:
+    - "apps"
+    - "assets"
+    - "config"
+    - "data"
+    - "themes"
+    - "updater"
+  nextcloud_php_modules:
+    - "php7.0-mysql"
+    - "php7.0-zip"
+    - "php7.0-gd"
+    - "php7.0-common"
+    - "php7.0-json"
+    - "php7.0-sqlite3"
+    - "php7.0-curl"
+    - "php7.0-ldap"
+    - "php-smbclient"
+    - "php7.0-imap"
+    - "php7.0-gmp"

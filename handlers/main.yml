@@ -1,0 +1,6 @@
+---
+# handlers file for nextcloud
+- name: restart apache
+  service:
+    name: "{{ apache_service }}"
+    state: restarted
