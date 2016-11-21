@@ -1,3 +1,6 @@
+
+[![Ansible Galaxy](https://img.shields.io/badge/Ansible%20Galaxy-Phill93.nextcloud-blue.svg)](https://galaxy.ansible.com/Phill93/nextcloud/)
+
 Role Name
 =========
 
