@@ -22,7 +22,6 @@
     unarchive:
       src: "{{ nextcloud_download_url }}"
       remote_src: yes
-      copy: no
       dest: "{{ nextcloud_extract_dir }}"
     when: installed.stat.exists == False
 
@@ -76,9 +75,7 @@
       group: "{{ nextcloud_http_group }}"
 
   - name: Use occ to install Nextcloud
-    shell: "php {{ nextcloud_install_dir }}/occ maintenance:install --database \"{{ nextcloud_database_type }}\" --database-name \"{{ nextcloud_database_name}}\"  --database-user \"{{ nextcloud_database_user }}\" --database-pass \"{{ nextcloud_database_pass }}\" --admin-user \"{{ nextcloud_admin_name }}\" --admin-pass \"{{ nextcloud_admin_pass }}\""
-    become: true
-    become_user: "www-data"
+    shell: "sudo -u www-data php {{ nextcloud_install_dir }}/occ maintenance:install --database \"{{ nextcloud_database_type }}\" --database-name \"{{ nextcloud_database_name}}\"  --database-user \"{{ nextcloud_database_user }}\" --database-pass \"{{ nextcloud_database_pass }}\" --admin-user \"{{ nextcloud_admin_name }}\" --admin-pass \"{{ nextcloud_admin_pass }}\""
     when: installed.stat.exists == False
 
   - name: Check if Installed
@@ -86,20 +83,18 @@
     register: installed
 
   - name: Check Memory Cache
-    command: php {{ nextcloud_install_dir }}/occ config:system:get memcache.local
-    become: true
-    become_user: "www-data"
+    shell: "sudo -u www-data php {{ nextcloud_install_dir }}/occ config:system:get memcache.local"
     register: memcache
     ignore_errors: yes
 
   - name: Enable APC Memory Cache
-    command: php {{ nextcloud_install_dir }}/occ config:system:set memcache.local --value="\OC\Memcache\APC"
-    become: true
-    become_user: "www-data"
+    command: sudo -u www-data php {{ nextcloud_install_dir }}/occ config:system:set memcache.local --value="\OC\Memcache\APC"
     when: nextcloud_memcache == "APC" and installed.stat.exists == True and memcache.stdout != "\\OC\\Memcache\\APC"
 
   - name: Enable APCu Memory Cache
-    command: php {{ nextcloud_install_dir }}/occ config:system:set memcache.local --value="\OC\Memcache\APCu"
-    become: true
-    become_user: "www-data"
+    command: sudo -u www-data php {{ nextcloud_install_dir }}/occ config:system:set memcache.local --value="\OC\Memcache\APCu"
     when: nextcloud_memcache == "APCu" and installed.stat.exists == True  and memcache.stdout != "\\OC\\Memcache\\APCu"
+
+  - name: Set Trusted Domains
+    command: sudo -u www-data php {{ nextcloud_install_dir }}/occ config:system:set trusted_domains {{ item.0 }} --value="{{ item.1 }}"
+    with_indexed_items: "{{ nextcloud_trusted_domains }}"

@@ -23,3 +23,4 @@
     - "php-smbclient"
     - "php7.0-imap"
     - "php7.0-gmp"
+  apache_service: "apache2"

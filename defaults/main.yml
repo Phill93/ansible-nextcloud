@@ -21,7 +21,7 @@
   nextcloud_memcache: "APCu"
 
   # Nextcloud download
-  nextcloud_version: "10.0.1"
+  nextcloud_version: "10.0.2"
 
   # Webserver owner
   nextcloud_http_user: "www-data"
