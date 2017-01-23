@@ -3,12 +3,14 @@
   nextcloud_archive_name: "nextcloud-{{ nextcloud_version }}.tar.bz2"
   nextcloud_download_url: "https://download.nextcloud.com/server/releases/{{ nextcloud_archive_name }}"
   nextcloud_install_dir: "{{ nextcloud_extract_dir }}/nextcloud"
+  nextcloud_data_dir: "{{ nextcloud_install_dir }}/data"
+  nextcloud_database_host: "127.0.0.1"
+  nextcloud_database_port: "3306"
   # Nextcloud folders
   nextcloud_folders:
     - "apps"
     - "assets"
     - "config"
-    - "data"
     - "themes"
     - "updater"
   nextcloud_php_modules:
