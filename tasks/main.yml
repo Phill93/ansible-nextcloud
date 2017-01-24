@@ -18,6 +18,11 @@
       path: "{{ nextcloud_install_dir }}"
       state: directory
 
+  - name: Creating Nextcloud data directory
+    file:
+      path: "{{ nextcloud_data_dir }}"
+      state: directory
+
   - name: Extracting Nextcloud archive ("{{ nextcloud_download_url }}") to "{{ nextcloud_install_dir }}"
     unarchive:
       src: "{{ nextcloud_download_url }}"
@@ -27,30 +32,47 @@
 
   - name: Setting file permissions
     file:
-      path: "{{nextcloud_install_dir}}"
+      path: "{{ nextcloud_install_dir }}"
       mode: 0640
-      owner: "{{ nextcloud_http_user}}"
-      group: "{{ nextcloud_http_group}}"
+      owner: "{{ nextcloud_http_user }}"
+      group: "{{ nextcloud_http_group }}"
+      recurse: yes
+
+  - name: Setting data folder file permissions
+    file:
+      path: "{{ nextcloud_data_dir }}"
+      mode: 0640
+      owner: "{{ nextcloud_http_user }}"
+      group: "{{ nextcloud_http_group }}"
       recurse: yes
 
   - name: Setting folder permissions
     file:
-      path: "{{nextcloud_install_dir }}"
+      path: "{{ nextcloud_install_dir }}"
       mode: 0755
-      owner: "{{ nextcloud_http_user}}"
-      group: "{{ nextcloud_http_group}}"
+      owner: "{{ nextcloud_http_user }}"
+      group: "{{ nextcloud_http_group }}"
       state: directory
       recurse: yes
 
   - name: Setting folder permissions
     file:
-      path: "{{nextcloud_install_dir }}/{{ item }}"
+      path: "{{ nextcloud_install_dir }}/{{ item }}"
       mode: 0750
       owner: "{{ nextcloud_http_user}}"
       group: "{{ nextcloud_http_group}}"
       recurse: yes
       state: directory
     with_items: "{{ nextcloud_folders }}"
+
+  - name: Setting data folder permissions
+    file:
+      path: "{{ nextcloud_data_dir }}"
+      mode: 0750
+      owner: "{{ nextcloud_http_user }}"
+      group: "{{ nextcloud_http_group }}"
+      recurse: yes
+      state: directory
 
   - name: Setting .htaccess permissions
     file:
@@ -64,7 +86,7 @@
       path: "{{ nextcloud_data_dir }}/.htaccess"
       mode: 0644
       owner: "root"
-      group: "{{ nextcloud_http_group}}"
+      group: "{{ nextcloud_http_group }}"
     ignore_errors: yes
 
   - name: Make occ executable
@@ -75,7 +97,11 @@
       group: "{{ nextcloud_http_group }}"
 
   - name: Use occ to install Nextcloud
-    shell: "sudo -u www-data php {{ nextcloud_install_dir }}/occ maintenance:install --database \"{{ nextcloud_database_type }}\" --database-name \"{{ nextcloud_database_name}}\"  --database-user \"{{ nextcloud_database_user }}\" --database-pass \"{{ nextcloud_database_pass }}\" --admin-user \"{{ nextcloud_admin_name }}\" --admin-pass \"{{ nextcloud_admin_pass }}\""
+    shell: "php {{ nextcloud_install_dir }}/occ maintenance:install --database \"{{ nextcloud_database_type }}\" --database-name \"{{ nextcloud_database_name}}\" --database-host \"{{ nextcloud_database_host }}\"--database-port \"{{ nextcloud_database_port }}\" --database-user \"{{ nextcloud_database_user }}\" --database-pass \"{{ nextcloud_database_pass }}\" --admin-user \"{{ nextcloud_admin_name }}\" --admin-pass \"{{ nextcloud_admin_pass }}\" --data-dir \"{{ nextcloud_data_dir }}\" --no-interaction"
+    become: true
+    become_method: su
+    become_flags: '-s /bin/sh'
+    become_user: "{{ nextcloud_http_user }}"
     when: installed.stat.exists == False
 
   - name: Check if Installed
@@ -83,18 +109,34 @@
     register: installed
 
   - name: Check Memory Cache
-    shell: "sudo -u www-data php {{ nextcloud_install_dir }}/occ config:system:get memcache.local"
+    shell: "php {{ nextcloud_install_dir }}/occ config:system:get memcache.local"
+    become: true
+    become_method: su
+    become_flags: '-s /bin/sh'
+    become_user: "{{ nextcloud_http_user }}"
     register: memcache
     ignore_errors: yes
 
   - name: Enable APC Memory Cache
-    command: sudo -u www-data php {{ nextcloud_install_dir }}/occ config:system:set memcache.local --value="\OC\Memcache\APC"
+    command: php {{ nextcloud_install_dir }}/occ config:system:set memcache.local --value="\OC\Memcache\APC"
+    become: true
+    become_method: su
+    become_flags: '-s /bin/sh'
+    become_user: "{{ nextcloud_http_user }}"
     when: nextcloud_memcache == "APC" and installed.stat.exists == True and memcache.stdout != "\\OC\\Memcache\\APC"
 
   - name: Enable APCu Memory Cache
-    command: sudo -u www-data php {{ nextcloud_install_dir }}/occ config:system:set memcache.local --value="\OC\Memcache\APCu"
+    command: php {{ nextcloud_install_dir }}/occ config:system:set memcache.local --value="\OC\Memcache\APCu"
+    become: true
+    become_method: su
+    become_flags: '-s /bin/sh'
+    become_user: "{{ nextcloud_http_user }}"
     when: nextcloud_memcache == "APCu" and installed.stat.exists == True  and memcache.stdout != "\\OC\\Memcache\\APCu"
 
   - name: Set Trusted Domains
-    command: sudo -u www-data php {{ nextcloud_install_dir }}/occ config:system:set trusted_domains {{ item.0 }} --value="{{ item.1 }}"
+    command: "php {{ nextcloud_install_dir }}/occ config:system:set trusted_domains {{ item.0 }} --value=\"{{ item.1 }}\""
+    become: true
+    become_method: su
+    become_flags: '-s /bin/sh'
+    become_user: "{{ nextcloud_http_user }}"
     with_indexed_items: "{{ nextcloud_trusted_domains }}"
