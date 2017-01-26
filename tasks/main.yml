@@ -1,5 +1,8 @@
 ---
 # tasks file for nextcloud
+  - name: Include OS-specific variables.
+    include_vars: "{{ ansible_distribution }}.yml"
+
   - name: Install required packages
     apt:
       name: "{{ item }}"
@@ -97,11 +100,8 @@
       group: "{{ nextcloud_http_group }}"
 
   - name: Use occ to install Nextcloud
-    shell: "php {{ nextcloud_install_dir }}/occ maintenance:install --database \"{{ nextcloud_database_type }}\" --database-name \"{{ nextcloud_database_name}}\" --database-host \"{{ nextcloud_database_host }}\"--database-port \"{{ nextcloud_database_port }}\" --database-user \"{{ nextcloud_database_user }}\" --database-pass \"{{ nextcloud_database_pass }}\" --admin-user \"{{ nextcloud_admin_name }}\" --admin-pass \"{{ nextcloud_admin_pass }}\" --data-dir \"{{ nextcloud_data_dir }}\" --no-interaction"
+    shell: "{{ nextcloud_install_cmd }}"
     become: true
-    become_method: su
-    become_flags: '-s /bin/sh'
-    become_user: "{{ nextcloud_http_user }}"
     when: installed.stat.exists == False
 
   - name: Check if Installed
@@ -109,34 +109,22 @@
     register: installed
 
   - name: Check Memory Cache
-    shell: "php {{ nextcloud_install_dir }}/occ config:system:get memcache.local"
+    shell: "{{ nextcloud_memorycache_check_cmd}}"
     become: true
-    become_method: su
-    become_flags: '-s /bin/sh'
-    become_user: "{{ nextcloud_http_user }}"
     register: memcache
     ignore_errors: yes
 
   - name: Enable APC Memory Cache
-    command: php {{ nextcloud_install_dir }}/occ config:system:set memcache.local --value="\OC\Memcache\APC"
+    shell: "{{ nextcloud_memorycache_enable_apc_cmd }}"
     become: true
-    become_method: su
-    become_flags: '-s /bin/sh'
-    become_user: "{{ nextcloud_http_user }}"
     when: nextcloud_memcache == "APC" and installed.stat.exists == True and memcache.stdout != "\\OC\\Memcache\\APC"
 
   - name: Enable APCu Memory Cache
-    command: php {{ nextcloud_install_dir }}/occ config:system:set memcache.local --value="\OC\Memcache\APCu"
+    shell: "{{ nextcloud_memorycache_enable_apcu_cmd }}"
     become: true
-    become_method: su
-    become_flags: '-s /bin/sh'
-    become_user: "{{ nextcloud_http_user }}"
     when: nextcloud_memcache == "APCu" and installed.stat.exists == True  and memcache.stdout != "\\OC\\Memcache\\APCu"
 
   - name: Set Trusted Domains
-    command: "php {{ nextcloud_install_dir }}/occ config:system:set trusted_domains {{ item.0 }} --value=\"{{ item.1 }}\""
+    shell: "{{ nextcloud_set_trusted_dom_cmd }}"
     become: true
-    become_method: su
-    become_flags: '-s /bin/sh'
-    become_user: "{{ nextcloud_http_user }}"
     with_indexed_items: "{{ nextcloud_trusted_domains }}"

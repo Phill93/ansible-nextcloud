@@ -20,6 +20,9 @@ galaxy_info:
   - name: Ubuntu
     versions:
     - xenial
+  - name: Debian
+    versions:
+    - jessie
 
 
   galaxy_tags:
