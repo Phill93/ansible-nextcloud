@@ -27,6 +27,8 @@
   nextcloud_http_user: "www-data"
   nextcloud_http_group: "www-data"
 
+  nextcloud_cron: True
+
   nextcloud_trusted_domains:
     - "localhost"
     - "{{ ansible_fqdn }}"

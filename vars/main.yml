@@ -21,3 +21,5 @@
   nextcloud_memorycache_enable_apc_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ config:system:set memcache.local --value=\"\\OC\\Memcache\\APC\"'"
   nextcloud_memorycache_enable_apcu_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ config:system:set memcache.local --value=\"\\OC\\Memcache\\APCu\"'"
   nextcloud_set_trusted_dom_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ config:system:set trusted_domains {{ item.0 }} --value=\"{{ item.1 }}\"'"
+  nextcloud_cron_en_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ background:cron'"
+  nextcloud_cron_cmd: "php {{ nextcloud_install_dir }}/cron.php"

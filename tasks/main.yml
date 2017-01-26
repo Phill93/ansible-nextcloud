@@ -128,3 +128,17 @@
     shell: "{{ nextcloud_set_trusted_dom_cmd }}"
     become: true
     with_indexed_items: "{{ nextcloud_trusted_domains }}"
+
+  - name: Install Cronjob
+    cron:
+      name: "Nextcloud Cronjob"
+      minute: "*/15"
+      user: "{{ nextcloud_http_user }}"
+      job: "{{ nextcloud_cron_cmd}}"
+      cron_file: "nextcloud"
+    when: nextcloud_cron == True
+
+  - name: Set Cron method to Crontab
+    shell: "{{ nextcloud_cron_en_cmd }}"
+    become: true
+    when: nextcloud_cron == True
