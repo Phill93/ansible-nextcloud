@@ -1,4 +1,5 @@
 nextcloud_php_modules:
+  - "php-apcu"
   - "php7.0-mysql"
   - "php7.0-zip"
   - "php7.0-gd"
