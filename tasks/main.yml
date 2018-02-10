@@ -10,7 +10,7 @@
       update-cache: yes
     with_items:
       "{{ nextcloud_php_modules }}"
-    notify: restart apache
+    notify: restart webserver
 
   - name: Check if Installed
     stat: path={{ nextcloud_install_dir}}/config/config.php

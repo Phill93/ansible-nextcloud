@@ -1,6 +1,6 @@
 ---
 # handlers file for nextcloud
-- name: restart apache
+- name: restart webserver
   service:
-    name: "{{ apache_service }}"
+    name: "{{ nextcloud_webserver_deamon }}"
     state: restarted

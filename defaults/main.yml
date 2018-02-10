@@ -9,6 +9,8 @@
   nextcloud_database_pass: ""
   nextcloud_database_prefix: "oc_"
 
+  nextcloud_webserver_deamon: apache2
+  
   # Nextcloud admin user data
   nextcloud_admin_name: "admin"
   nextcloud_admin_pass: "admin"

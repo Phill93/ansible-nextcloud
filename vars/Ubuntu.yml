@@ -20,4 +20,3 @@ nextcloud_php_modules:
   - "php-imagick"
   - "ffmpeg"
   - "libreoffice"
-  - "libapache2-mod-php7.0"

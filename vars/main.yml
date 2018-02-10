@@ -13,7 +13,6 @@
     - "config"
     - "themes"
     - "updater"
-  apache_service: "apache2"
 
   nextcloud_switch_user: "su {{ nextcloud_http_user }} -s /bin/sh -c "
   nextcloud_install_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ maintenance:install --database=\"{{ nextcloud_database_type }}\" --database-name=\"{{ nextcloud_database_name}}\" --database-host=\"{{ nextcloud_database_host }}\" --database-port=\"{{ nextcloud_database_port }}\" --database-user=\"{{ nextcloud_database_user }}\" --database-pass=\"{{ nextcloud_database_pass }}\" --database-table-prefix=\"{{ nextcloud_database_prefix }}\" --admin-user=\"{{ nextcloud_admin_name }}\" --admin-pass=\"{{ nextcloud_admin_pass }}\" --data-dir=\"{{ nextcloud_data_dir }}\" --no-interaction'"
