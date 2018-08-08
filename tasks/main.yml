@@ -3,6 +3,9 @@
   - name: Include OS-specific variables.
     include_vars: "{{ ansible_distribution }}.yml"
 
+  - include_tasks: data_disk.yml
+    when: nextcloud_dedicated_data_disk
+
   - include_tasks: install.yml
 
   - include_tasks: config/memory_cache.yml

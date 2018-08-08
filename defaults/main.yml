@@ -41,3 +41,8 @@
   #   - name: files_antivirus
   #     repo: https://github.com/nextcloud/files_antivirus
   nextcloud_additional_apps: []
+
+  nextcloud_dedicated_data_disk: false
+  nextcloud_dedicated_data_disk_device: /dev/sdb
+  nextcloud_dedicated_data_disk_fstype: ext4
+  nextcloud_dedicated_data_disk_mount_point: /data
