@@ -103,3 +103,12 @@
   - name: Check if Installed
     stat: path={{ nextcloud_install_dir}}/config/config.php
     register: installed
+
+  - name: Install additional apps
+    git:
+      repo: "{{ item.repo }}"
+      dest: "{{ nextcloud_install_dir }}/apps/{{ item.name }}"
+      update: no
+    with_items: "{{ nextcloud_additional_apps }}"
+
+
