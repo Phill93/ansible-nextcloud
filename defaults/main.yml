@@ -34,3 +34,9 @@
   nextcloud_trusted_domains:
     - "localhost"
     - "{{ ansible_fqdn }}"
+
+# Example:
+# nextcloud_additional_apps:
+#   - name: files_antivirus
+#     repo: https://github.com/nextcloud/files_antivirus
+  nextcloud_additional_apps: []
