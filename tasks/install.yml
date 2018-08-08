@@ -21,6 +21,25 @@
     file:
       path: "{{ nextcloud_data_dir }}"
       state: directory
+    when: nextcloud_data_dir_storage_location is not defined
+
+  - name: Create directory nextcloud_data_dir_storage_location
+    file:
+      path: "{{ nextcloud_data_dir_storage_location }}"
+      state: directory
+    when: nextcloud_data_dir_storage_location is defined
+
+  - name: Create symbolic link for data directory
+    file:
+      src: "{{ nextcloud_data_dir_storage_location }}"
+      dest: "{{ nextcloud_data_dir }}"
+      owner: "{{ nextcloud_http_user }}"
+      group: "{{ nextcloud_http_group }}"
+      state: link
+      mode: 0750
+      owner: "{{ nextcloud_http_user }}"
+      group: "{{ nextcloud_http_group }}"
+    when: nextcloud_data_dir_storage_location is defined
 
   - name: Extracting Nextcloud archive ("{{ nextcloud_download_url }}") to "{{ nextcloud_install_dir }}"
     unarchive:
@@ -39,7 +58,7 @@
 
   - name: Setting data folder file permissions
     file:
-      path: "{{ nextcloud_data_dir }}"
+      path: "{{ nextcloud_data_dir }}/"
       mode: 0640
       owner: "{{ nextcloud_http_user }}"
       group: "{{ nextcloud_http_group }}"
