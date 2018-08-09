@@ -5,6 +5,7 @@
     src: ldap.conf.j2
     dest: "{{ nextcloud_ldaps_config }}"
     mode: 0644
+    backup: yes
 
 - name: copy ca certificates for ldaps
   copy:
