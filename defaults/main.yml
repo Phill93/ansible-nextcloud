@@ -53,3 +53,5 @@
   nextcloud_ldaps_config: /etc/ldap/ldap.conf
   nextcloud_ldaps_ca_certificates:
     - files/ca-certificates/mycacert.crt
+
+  nextcloud_install_mod_authnz_jwt: false
