@@ -18,7 +18,7 @@
   # Nextcloud folders
   nextcloud_extract_dir: "/var/www"
   nextcloud_data_dir: "{{ nextcloud_install_dir }}/data"
-  nextcloud_data_dir_storage_location:
+  #nextcloud_data_dir_storage_location:
 
   # Nextcloud Memory Cache (Currently only APC and APCu is Supported)
   nextcloud_memcache: "APCu"
@@ -46,3 +46,5 @@
   nextcloud_dedicated_data_disk_device: /dev/sdb
   nextcloud_dedicated_data_disk_fstype: ext4
   nextcloud_dedicated_data_disk_mount_point: /data
+
+  nextcloud_install_mod_authnz_jwt: false

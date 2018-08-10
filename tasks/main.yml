@@ -15,3 +15,6 @@
 
   - include_tasks: config/cronjob.yml
     when: nextcloud_cron == True
+
+  - include_tasks: config/jwt_authentication.yml
+    when: nextcloud_install_mod_authnz_jwt
