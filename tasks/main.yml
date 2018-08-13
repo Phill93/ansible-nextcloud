@@ -17,6 +17,7 @@
     when: nextcloud_cron == True
 
   - include_tasks: config/ldaps_config.yml
+    when: nextcloud_ldaps_base_configure
 
   - include_tasks: config/jwt_authentication.yml
     when: nextcloud_install_mod_authnz_jwt
