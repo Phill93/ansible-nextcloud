@@ -1,0 +1,30 @@
+---
+  - hosts: all
+    become: true
+    vars:
+      nextcloud_extract_dir: "/var/www/html/"
+    pre_tasks:
+      - name: Install apache
+        apt:
+          name: apache2
+          state: present
+          update_cache: yes
+      - name: Install php
+        apt:
+          name: libapache2-mod-php7.0
+      - name: restart apache
+        service:
+          name: apache2
+          state: restarted
+    roles:
+      - role: ansible-nextcloud
+    post_tasks:
+      - name: Check if install is success
+        uri:
+          url: http://localhost/nextcloud/index.php/login
+          return_content: yes
+        register: response
+
+      - name: Check response
+        fail:
+        when: "'a safe home for all your data' not in response.content" 
