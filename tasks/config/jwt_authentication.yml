@@ -34,6 +34,7 @@
     - ./configure
     - make
     - make install
+#  notify: restart webserver
 
 - name: 
   command: "{{ item }}"
@@ -44,3 +45,4 @@
     - ./configure
     - make
     - make install
+#  notify: restart webserver
