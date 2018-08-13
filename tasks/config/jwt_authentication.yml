@@ -17,19 +17,18 @@
 - name: clone repo libjwt
   git:
     repo: https://github.com/benmcollins/libjwt
-    dest: /tmp/libjwt
+    dest: /var/tmp/libjwt
     version: tags/v1.8.0
 
 - name: clone repo mod_authnz_jwt
   git:
     repo: https://github.com/AnthonyDeroche/mod_authnz_jwt
-    dest: /tmp/mod_authnz_jwt
+    dest: /var/tmp/mod_authnz_jwt
 
 - name: 
   command: "{{ item }}"
   args:
-    chdir: /tmp/libjwt
-    creates: /usr/local/lib/libjwt.so
+    chdir: /var/tmp/libjwt
   with_items:
     - autoreconf -i
     - ./configure
@@ -39,8 +38,7 @@
 - name: 
   command: "{{ item }}"
   args:
-    chdir: /tmp/mod_authnz_jwt
-    creates: /usr/lib/apache2/modules/mod_authnz_jwt.so
+    chdir: /var/tmp/mod_authnz_jwt
   with_items:
     - autoreconf -ivf
     - ./configure
