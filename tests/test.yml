@@ -17,7 +17,7 @@
           name: apache2
           state: restarted
     roles:
-      - role: ansible-nextcloud
+      - role: role_under_test
     post_tasks:
       - name: Check if install is success
         uri:
@@ -27,4 +27,4 @@
 
       - name: Check response
         fail:
-        when: "'a safe home for all your data' not in response.content" 
+        when: "'a safe home for all your data' not in response.content"
