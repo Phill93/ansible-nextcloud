@@ -29,6 +29,32 @@ Example Playbook
   roles:
     - role: nextcloud
 ```
+Example Apache Configuration for JWT Authentication
+---------------------------------------------------
+```apache
+<VirtualHost *:443>
+  ServerName example.com
+  DocumentRoot "/var/www/nextcloud"
+
+  <Directory "/var/www/nextcloud">
+    AllowOverride All
+    Options -Indexes +FollowSymLinks
+    Require all granted
+  </Directory>
+  
+AuthJWTSignatureAlgorithm HS256
+AuthJWTSignatureSharedSecret Q0hBTkdFTUU=
+AuthJWTIss IAM
+
+<Location "/index.php/apps/user_saml/saml/login">
+  AuthType jwt
+  AuthName "private area"
+  Require valid-user
+</Location>
+
+</VirtualHost>
+```
+
 License
 -------
 
