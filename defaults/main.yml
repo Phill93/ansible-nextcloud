@@ -46,3 +46,10 @@
   nextcloud_dedicated_data_disk_device: /dev/sdb
   nextcloud_dedicated_data_disk_fstype: ext4
   nextcloud_dedicated_data_disk_mount_point: /data
+
+  nextcloud_ldaps_base: dc=example,dc=com
+  nextcloud_ldaps_hosts: ldaps://srv001.example.com:636 ldaps://srv002.example.com:636
+  nextcloud_ldaps_tls_cacertdir: /etc/ssl/certs
+  nextcloud_ldaps_config: /etc/ldap/ldap.conf
+  nextcloud_ldaps_ca_certificates:
+    - files/ca-certificates/mycacert.crt
