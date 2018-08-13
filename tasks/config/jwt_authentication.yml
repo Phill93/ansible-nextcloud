@@ -29,6 +29,7 @@
   command: "{{ item }}"
   args:
     chdir: /tmp/libjwt
+    creates: /usr/local/lib/libjwt.so
   with_items:
     - autoreconf -i
     - ./configure
@@ -39,6 +40,7 @@
   command: "{{ item }}"
   args:
     chdir: /tmp/mod_authnz_jwt
+    creates: /usr/lib/apache2/modules/mod_authnz_jwt.so
   with_items:
     - autoreconf -ivf
     - ./configure
