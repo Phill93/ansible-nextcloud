@@ -17,32 +17,44 @@
 - name: clone repo libjwt
   git:
     repo: https://github.com/benmcollins/libjwt
-    dest: /var/tmp/libjwt
+    dest: "{{ nextcloud_install_jwt_temp_dir }}/libjwt"
     version: tags/v1.8.0
 
-- name: clone repo mod_authnz_jwt
-  git:
-    repo: https://github.com/AnthonyDeroche/mod_authnz_jwt
-    dest: /var/tmp/mod_authnz_jwt
-
-- name: 
+- name: compile libjwt
   command: "{{ item }}"
   args:
-    chdir: /var/tmp/libjwt
+    chdir: "{{ nextcloud_install_jwt_temp_dir }}/libjwt"
   with_items:
     - autoreconf -i
     - ./configure
     - make
-    - make install
-#  notify: restart webserver
+  changed_when: false
 
-- name: 
+- name: install libjwt
+  command: make install
+  args:
+    chdir: "{{ nextcloud_install_jwt_temp_dir }}/libjwt"
+    creates: /usr/local/lib/libjwt.so
+  notify: restart webserver
+
+- name: clone repo mod_authnz_jwt
+  git:
+    repo: https://github.com/AnthonyDeroche/mod_authnz_jwt
+    dest: "{{ nextcloud_install_jwt_temp_dir }}/mod_authnz_jwt"
+
+- name: compile mod_authnz_jwt
   command: "{{ item }}"
   args:
-    chdir: /var/tmp/mod_authnz_jwt
+    chdir: "{{ nextcloud_install_jwt_temp_dir }}/mod_authnz_jwt"
   with_items:
     - autoreconf -ivf
     - ./configure
     - make
-    - make install
-#  notify: restart webserver
+  changed_when: false
+
+- name: install mod_authnz_jwt
+  command: make install
+  args:
+    chdir: "{{ nextcloud_install_jwt_temp_dir }}/mod_authnz_jwt"
+    creates: /usr/lib/apache2/modules/mod_authnz_jwt.so
+  notify: restart webserver

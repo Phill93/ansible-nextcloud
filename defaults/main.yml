@@ -56,3 +56,4 @@
     - files/ca-certificates/mycacert.crt
 
   nextcloud_install_mod_authnz_jwt: false
+  nextcloud_install_jwt_temp_dir: /var/tmp
