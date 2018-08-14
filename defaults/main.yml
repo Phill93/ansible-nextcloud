@@ -51,6 +51,7 @@
   nextcloud_ldaps_base: dc=example,dc=com
   nextcloud_ldaps_hosts: ldaps://srv001.example.com:636 ldaps://srv002.example.com:636
   nextcloud_ldaps_tls_cacertdir: /etc/ssl/certs
+  nextcloud_ldaps_tls_cacert: /etc/ssl/certs/ca-certificates.crt
   nextcloud_ldaps_config: /etc/ldap/ldap.conf
   nextcloud_ldaps_ca_certificates:
     - files/ca-certificates/mycacert.crt

@@ -13,6 +13,7 @@ URI     {{ nextcloud_ldaps_hosts }}
 #DEREF          never
 
 TLS_CACERTDIR   {{ nextcloud_ldaps_tls_cacertdir }}
+TLS_CACERT      {{ nextcloud_ldaps_tls_cacert }}
 
 # Turning this off breaks GSSAPI used with krb5 when rdns = false
 SASL_NOCANON    on
