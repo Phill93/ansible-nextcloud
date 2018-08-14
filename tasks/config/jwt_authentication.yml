@@ -58,3 +58,7 @@
     chdir: "{{ nextcloud_install_jwt_temp_dir }}/mod_authnz_jwt"
     creates: /usr/lib/apache2/modules/mod_authnz_jwt.so
   notify: restart webserver
+
+- name: copy /usr/local/lib/libjwt.* files to /lib/x86_64-linux-gnu/ (problem with debian)
+  shell: cp /usr/local/lib/libjwt.* /lib/x86_64-linux-gnu/
+  changed_when: false
