@@ -6,8 +6,10 @@ services: docker
 env:
   - distro: debian9
     playbook: test.yml
+    test_idempotence: false
   - distro: ubuntu1804
     playbook: test.yml
+    test_idempotence: false
 
 script:
   # Configure test script so we can run extra tests after playbook is run.
