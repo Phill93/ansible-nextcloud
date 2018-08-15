@@ -14,7 +14,6 @@ nextcloud_php_modules:
   - "php7.2-xml"
   - "php7.2-bz2"
   - "php7.2-intl"
-  - "php7.2-mcrypt"
   - "php7.2-imap"
   - "php7.2-mbstring"
   - "php-imagick"
