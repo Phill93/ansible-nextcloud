@@ -12,3 +12,6 @@
 
   - include_tasks: config/cronjob.yml
     when: nextcloud_cron == True
+
+  - include_tasks: config/apps.yml
+    when: nextcloud_additional_apps is defined and (nextcloud_additional_apps|length>0)
