@@ -6,7 +6,7 @@
   - include_tasks: install.yml
 
   - include_tasks: config/memory_cache.yml
-    when: nextcloud_memcache
+    when: nextcloud_memcache is defined
 
   - include_tasks: config/trusted_domains.yml
 
