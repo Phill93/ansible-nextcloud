@@ -58,3 +58,6 @@
 
   nextcloud_install_mod_authnz_jwt: false
   nextcloud_install_jwt_temp_dir: /var/tmp
+
+#  nextcloud_skeletondirectory:
+  nextcloud_skeletondirectory_link_user_manual: false

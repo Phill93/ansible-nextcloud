@@ -1,0 +1,22 @@
+---
+
+- name: Create sekelton directory
+  file:
+    path: "{{ nextcloud_skeletondirectory }}"
+    state: directory
+  when: nextcloud_skeletondirectory is defined
+
+- name: Configuring skeletondirectory in nextcloud/config/config.php
+  lineinfile:
+    path: "{{ nextcloud_extract_dir }}/nextcloud/config/config.php"
+    insertbefore: '^\);'
+    line: "'skeletondirectory' => '{{ nextcloud_skeletondirectory }}'"
+  when: nextcloud_skeletondirectory is defined
+
+- name: Link user manual to skeleton
+  file:
+    src: "{{ nextcloud_extract_dir }}/nextcloud/core/skeleton/Nextcloud Manual.pdf"
+    dest: "{{ nextcloud_skeletondirectory }}/Nextcloud Manual.pdf"
+    state: link
+  when: nextcloud_skeletondirectory_link_user_manual
+  notify: restart webserver
