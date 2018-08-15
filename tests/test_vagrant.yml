@@ -11,7 +11,7 @@
           update_cache: yes
       - name: Install php
         apt:
-          name: libapache2-mod-php7.0
+          name: libapache2-mod-php
       - name: restart apache
         service:
           name: apache2
@@ -27,4 +27,4 @@
 
       - name: Check response
         fail:
-        when: "'a safe home for all your data' not in response.content" 
+        when: "'a safe home for all your data' not in response.content"
