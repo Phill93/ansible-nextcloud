@@ -3,5 +3,5 @@
     git:
       repo: "{{ item.repo }}"
       dest: "{{ nextcloud_install_dir }}/apps/{{ item.name }}"
-      update: No
+      update: "{{ item.autoupdate }}"
     with_items: "{{ nextcloud_additional_apps }}"
