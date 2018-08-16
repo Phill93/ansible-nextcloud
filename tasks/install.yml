@@ -5,7 +5,9 @@
       state: present
       update-cache: yes
     with_items:
-      "{{ nextcloud_php_modules }}"
+      - "{{ nextcloud_php_modules }}"
+      - bzip2
+      - sudo
     notify: restart webserver
 
   - name: Check if Installed
