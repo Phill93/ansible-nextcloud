@@ -13,6 +13,7 @@
     - apache2
     - apache2-dev
     - libz-dev
+    - build-essential
 
 - name: clone repo libjwt
   git:
