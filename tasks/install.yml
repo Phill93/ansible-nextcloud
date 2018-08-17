@@ -8,6 +8,7 @@
       - "{{ nextcloud_php_modules }}"
       - bzip2
       - sudo
+      - git
     notify: restart webserver
 
   - name: Check if Installed
