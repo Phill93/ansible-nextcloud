@@ -133,6 +133,5 @@
       repo: "{{ item.repo }}"
       dest: "{{ nextcloud_install_dir }}/apps/{{ item.name }}"
       update: no
+      version: "{{ item.version }}"
     with_items: "{{ nextcloud_additional_apps }}"
-
-
