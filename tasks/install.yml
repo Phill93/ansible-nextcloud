@@ -29,6 +29,8 @@
     file:
       path: "{{ nextcloud_data_dir_storage_location }}"
       state: directory
+      mode: 0755
+      recurse: yes
     when: nextcloud_data_dir_storage_location is defined
 
   - name: Create symbolic link for data directory
