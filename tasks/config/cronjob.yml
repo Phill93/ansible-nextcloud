@@ -13,7 +13,7 @@
       become: true
       when: nextcloud_cron == True
 
-    - name: Configure Custom cron jobs
+    - name: Configure custom cron jobs
       cron:
         name: "{{ item.name }}"
         minute: "{{ item.minute }}"
