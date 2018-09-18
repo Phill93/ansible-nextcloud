@@ -61,3 +61,13 @@
 
 #  nextcloud_skeletondirectory:
   nextcloud_skeletondirectory_link_user_manual: false
+
+  nextcloud_custom_cron_jobs: []
+#      nextcloud_custom_cron_jobs:
+#        - name: myjob
+#          minute: *
+#          hour: *
+#          month: *
+#          day: *
+#          job: "echo hello world"
+#          user: root
