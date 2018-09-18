@@ -22,5 +22,5 @@
         day: "{{ item.day }}"
         job: "{{ item.job }}"
         user: "{{ item.user }}"
-      with_item:
+      with_items:
         - "{{ nextcloud_custom_cron_jobs }}"

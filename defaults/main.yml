@@ -65,9 +65,9 @@
   nextcloud_custom_cron_jobs: []
 #      nextcloud_custom_cron_jobs:
 #        - name: myjob
-#          minute: *
-#          hour: *
-#          month: *
-#          day: *
+#          minute: "*"
+#          hour: "*"
+#          month: "*"
+#          day: "*"
 #          job: "echo hello world"
 #          user: root
