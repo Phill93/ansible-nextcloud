@@ -23,5 +23,5 @@
 - name: Set Trusted Proxies
   shell: "{{ nextcloud_set_trusted_proxies_cmd }}"
   become: true
-  with_indexed_items: "{{ nextcloud_trusted_domains }}"
+  with_indexed_items: "{{ nextcloud_trusted_proxies }}"
   when: nextcloud_trusted_proxies is defined
