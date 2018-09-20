@@ -22,3 +22,6 @@
   nextcloud_set_trusted_dom_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ config:system:set trusted_domains {{ item.0 }} --value=\"{{ item.1 }}\"'"
   nextcloud_cron_en_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ background:cron'"
   nextcloud_cron_cmd: "php {{ nextcloud_install_dir }}/cron.php"
+  nextcloud_set_trusted_proxies_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ config:system:set trusted_proxies {{ item.0 }} --value=\"{{ item.1 }}\"'"
+  nextcloud_set_skeletondirectory_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ config:system:set skeletondirectory --value=\"{{ nextcloud_skeletondirectory }}\"'"
+  

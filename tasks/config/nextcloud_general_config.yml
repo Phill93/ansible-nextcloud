@@ -7,10 +7,8 @@
   when: nextcloud_skeletondirectory is defined
 
 - name: Configuring skeletondirectory in nextcloud/config/config.php
-  lineinfile:
-    path: "{{ nextcloud_extract_dir }}/nextcloud/config/config.php"
-    insertbefore: '^\);'
-    line: "'skeletondirectory' => '{{ nextcloud_skeletondirectory }}'"
+  shell: "{{ nextcloud_set_skeletondirectory_cmd }}"
+  become: true
   when: nextcloud_skeletondirectory is defined
 
 - name: Link user manual to skeleton
@@ -20,3 +18,10 @@
     state: link
   when: nextcloud_skeletondirectory_link_user_manual
   notify: restart webserver
+
+  
+- name: Set Trusted Proxies
+  shell: "{{ nextcloud_set_trusted_proxies_cmd }}"
+  become: true
+  with_indexed_items: "{{ nextcloud_trusted_domains }}"
+  when: nextcloud_trusted_proxies is defined
