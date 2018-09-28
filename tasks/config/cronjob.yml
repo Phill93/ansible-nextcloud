@@ -12,3 +12,15 @@
       shell: "{{ nextcloud_cron_en_cmd }}"
       become: true
       when: nextcloud_cron == True
+
+    - name: Configure custom cron jobs
+      cron:
+        name: "{{ item.name }}"
+        minute: "{{ item.minute }}"
+        hour: "{{ item.hour }}"
+        month: "{{ item.month }}"
+        day: "{{ item.day }}"
+        job: "{{ item.job }}"
+        user: "{{ item.user }}"
+      with_items:
+        - "{{ nextcloud_custom_cron_jobs }}"

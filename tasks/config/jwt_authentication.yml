@@ -1,0 +1,95 @@
+---
+
+- name: install required packages for mod_authnz_jwt
+  package:
+    name: "{{ item }}"
+  with_items:
+    - libtool
+    - pkg-config
+    - autoconf
+    - libssl-dev
+    - check
+    - libjansson-dev
+    - apache2
+    - apache2-dev
+    - libz-dev
+    - build-essential
+
+- name: clone repo libjwt
+  git:
+    repo: https://github.com/benmcollins/libjwt
+    dest: "{{ nextcloud_install_jwt_temp_dir }}/libjwt"
+    version: tags/v1.8.0
+
+- name: compile libjwt
+  command: "{{ item }}"
+  args:
+    chdir: "{{ nextcloud_install_jwt_temp_dir }}/libjwt"
+  with_items:
+    - autoreconf -i
+    - ./configure
+    - make
+  changed_when: false
+
+- name: install libjwt
+  command: make install
+  args:
+    chdir: "{{ nextcloud_install_jwt_temp_dir }}/libjwt"
+    creates: /usr/local/lib/libjwt.so
+  notify: restart webserver
+
+- name: clone repo mod_authnz_jwt
+  git:
+    repo: https://github.com/AnthonyDeroche/mod_authnz_jwt
+    dest: "{{ nextcloud_install_jwt_temp_dir }}/mod_authnz_jwt"
+
+- name: compile mod_authnz_jwt
+  command: "{{ item }}"
+  args:
+    chdir: "{{ nextcloud_install_jwt_temp_dir }}/mod_authnz_jwt"
+  with_items:
+    - autoreconf -ivf
+    - ./configure
+    - make
+  changed_when: false
+
+- name: install mod_authnz_jwt
+  command: make install
+  args:
+    chdir: "{{ nextcloud_install_jwt_temp_dir }}/mod_authnz_jwt"
+    creates: /usr/lib/apache2/modules/mod_authnz_jwt.so
+  notify: restart webserver
+
+- name: copy /usr/local/lib/libjwt.* files to /lib/x86_64-linux-gnu/ (problem with debian)
+  shell: cp /usr/local/lib/libjwt.* /lib/x86_64-linux-gnu/
+  changed_when: false
+
+#---------------------------------------------
+# The following scripts looks for the the annotaion "NoCSRFRequired" just before the "public function login()" 
+# and, in case it is not set, adds it to the File SAMLController.php. This ensuces JWT can get sent without 
+# the need of sending a CSRF-Token.
+#---------------------------------------------
+#grep "public function login" -B2 /var/www/html/nextcloud/apps/user_saml/lib/Controller/SAMLController.php | 
+#grep "NoCSRFRequired" || 
+#cat /var/www/html/nextcloud/apps/user_saml/lib/Controller/SAMLController.php | 
+#sed ':begin;$!N;s/\n/XXXXX/;tbegin' | 
+#sed 's/\*\/XXXXX\tpublic function login() {/\* \@NoCSRFRequiredXXXXX\t *\/XXXXX\tpublic function login() {/g' | 
+#sed ':begin;$!N;s/XXXXX/\n/;tbegin' | 
+#tee /var/www/html/nextcloud/apps/user_saml/lib/Controller/SAMLController.php
+- name: Annotate NoCSRFRequired for login-method in ../nextcloud/apps/user_saml/lib/Controller/SAMLController.php
+  shell: grep "public function login" -B2 {{ nextcloud_install_dir }}/apps/user_saml/lib/Controller/SAMLController.php | grep "NoCSRFRequired" || cat {{ nextcloud_install_dir }}/apps/user_saml/lib/Controller/SAMLController.php | sed ':begin;$!N;s/\n/XXXXX/;tbegin' | sed 's/\*\/XXXXX\tpublic function login() {/\* \@NoCSRFRequiredXXXXX\t *\/XXXXX\tpublic function login() {/g' | sed ':begin;$!N;s/XXXXX/\n/;tbegin' | tee {{ nextcloud_install_dir }}/apps/user_saml/lib/Controller/SAMLController.php
+
+#---------------------------------------------
+# The following scripts looks for the the annotaion "NoCSRFRequired" just before the "public function logout()" 
+# and, in case it is not set, adds it to the File LoginController.php. This ensuces JWT can get sent without 
+# the need of sending a CSRF-Token.
+#---------------------------------------------
+#grep "public function logout" -B2 /var/www/html/nextcloud/core/Controller/LoginController.php | 
+#grep "NoCSRFRequired" || 
+#cat /var/www/html/nextcloud/core/Controller/LoginController.php | 
+#sed ':begin;$!N;s/\n/XXXXX/;tbegin' | 
+#sed 's/\*\/XXXXX\tpublic function logout() {/\* \@NoCSRFRequiredXXXXX\t *\/XXXXX\tpublic function logout() {/g' | 
+#sed ':begin;$!N;s/XXXXX/\n/;tbegin' | 
+#tee /var/www/html/nextcloud/core/Controller/LoginController.php
+- name: Annotate NoCSRFRequired for logout-method in ../nextcloud/core/Controller/LoginController.php
+  shell: grep "public function logout" -B2 {{ nextcloud_install_dir }}/core/Controller/LoginController.php | grep "NoCSRFRequired" || cat {{ nextcloud_install_dir }}/core/Controller/LoginController.php | sed ':begin;$!N;s/\n/XXXXX/;tbegin' | sed 's/\*\/XXXXX\tpublic function logout() {/\* \@NoCSRFRequiredXXXXX\t *\/XXXXX\tpublic function logout() {/g' | sed ':begin;$!N;s/XXXXX/\n/;tbegin' | tee {{ nextcloud_install_dir }}/core/Controller/LoginController.php

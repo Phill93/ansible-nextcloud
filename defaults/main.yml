@@ -18,6 +18,7 @@
   # Nextcloud folders
   nextcloud_extract_dir: "/var/www"
   nextcloud_data_dir: "{{ nextcloud_install_dir }}/data"
+  #nextcloud_data_dir_storage_location:
 
   # Nextcloud Memory Cache (Currently only APC and APCu is Supported)
   nextcloud_memcache: "APCu"
@@ -34,3 +35,39 @@
   nextcloud_trusted_domains:
     - "localhost"
     - "{{ ansible_fqdn }}"
+
+  # Example:
+  # nextcloud_additional_apps:
+  #   - name: files_antivirus
+  #     repo: https://github.com/nextcloud/files_antivirus
+  nextcloud_additional_apps: []
+
+  nextcloud_dedicated_data_disk: false
+  nextcloud_dedicated_data_disk_device: /dev/sdb
+  nextcloud_dedicated_data_disk_fstype: ext4
+  nextcloud_dedicated_data_disk_mount_point: /data
+
+  nextcloud_ldaps_configure: false
+  nextcloud_ldaps_base: dc=example,dc=com
+  nextcloud_ldaps_hosts: ldaps://srv001.example.com:636 ldaps://srv002.example.com:636
+  nextcloud_ldaps_tls_cacertdir: /etc/ssl/certs
+  nextcloud_ldaps_tls_cacert: /etc/ssl/certs/ca-certificates.crt
+  nextcloud_ldaps_config: /etc/ldap/ldap.conf
+  nextcloud_ldaps_ca_certificates:
+    - files/ca-certificates/mycacert.crt
+
+  nextcloud_install_mod_authnz_jwt: false
+  nextcloud_install_jwt_temp_dir: /var/tmp
+
+#  nextcloud_skeletondirectory:
+  nextcloud_skeletondirectory_link_user_manual: false
+
+  nextcloud_custom_cron_jobs: []
+#      nextcloud_custom_cron_jobs:
+#        - name: myjob
+#          minute: "*"
+#          hour: "*"
+#          month: "*"
+#          day: "*"
+#          job: "echo hello world"
+#          user: root

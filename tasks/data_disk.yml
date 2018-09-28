@@ -1,0 +1,38 @@
+---
+
+- name: Install parted
+  package:
+    name: parted
+
+- name: Checking for existing partition on dedicated data disk
+  parted:
+    device: "{{ nextcloud_dedicated_data_disk_device }}"
+    unit: MiB
+  register: disk_info
+
+- name: Existing partitions
+  debug:
+    msg: "{{disk_info.partitions}}"
+  when: disk_info.partitions is defined
+
+- name: Create partition for dedicated data disk
+  parted:
+    device: "{{ nextcloud_dedicated_data_disk_device }}"
+    number: 1
+    state: present
+  when: disk_info.partitions is not defined
+
+- name: Create filesystem for dedicated data disk
+  filesystem:
+    fstype: "{{ nextcloud_dedicated_data_disk_fstype }}"
+    dev: "{{ nextcloud_dedicated_data_disk_device }}"
+
+- name: Mount partition for dedicated data disk
+  mount:
+    path: "{{ nextcloud_dedicated_data_disk_mount_point }}"
+    src: "{{ nextcloud_dedicated_data_disk_device }}"
+    fstype: "{{ nextcloud_dedicated_data_disk_fstype }}"
+    state: "{{ item }}"
+  with_items:
+    - mounted
+    - present

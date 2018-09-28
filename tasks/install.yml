@@ -5,7 +5,10 @@
       state: present
       update-cache: yes
     with_items:
-      "{{ nextcloud_php_modules }}"
+      - "{{ nextcloud_php_modules }}"
+      - bzip2
+      - sudo
+      - git
     notify: restart webserver
 
   - name: Check if Installed
@@ -21,6 +24,27 @@
     file:
       path: "{{ nextcloud_data_dir }}"
       state: directory
+    when: nextcloud_data_dir_storage_location is not defined
+
+  - name: Create directory nextcloud_data_dir_storage_location
+    file:
+      path: "{{ nextcloud_data_dir_storage_location }}"
+      state: directory
+      mode: 0755
+      recurse: yes
+    when: nextcloud_data_dir_storage_location is defined
+
+  - name: Create symbolic link for data directory
+    file:
+      src: "{{ nextcloud_data_dir_storage_location }}"
+      dest: "{{ nextcloud_data_dir }}"
+      owner: "{{ nextcloud_http_user }}"
+      group: "{{ nextcloud_http_group }}"
+      state: link
+      mode: 0750
+      owner: "{{ nextcloud_http_user }}"
+      group: "{{ nextcloud_http_group }}"
+    when: nextcloud_data_dir_storage_location is defined
 
   - name: Extracting Nextcloud archive ("{{ nextcloud_download_url }}") to "{{ nextcloud_install_dir }}"
     unarchive:
@@ -39,7 +63,7 @@
 
   - name: Setting data folder file permissions
     file:
-      path: "{{ nextcloud_data_dir }}"
+      path: "{{ nextcloud_data_dir }}/"
       mode: 0640
       owner: "{{ nextcloud_http_user }}"
       group: "{{ nextcloud_http_group }}"
@@ -103,3 +127,11 @@
   - name: Check if Installed
     stat: path={{ nextcloud_install_dir}}/config/config.php
     register: installed
+
+  - name: Install additional apps
+    git:
+      repo: "{{ item.repo }}"
+      dest: "{{ nextcloud_install_dir }}/apps/{{ item.name }}"
+      update: no
+      version: "{{ item.version }}"
+    with_items: "{{ nextcloud_additional_apps }}"

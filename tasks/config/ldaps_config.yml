@@ -1,0 +1,15 @@
+---
+
+- name: configure ldap client for ldaps
+  template:
+    src: ldap.conf.j2
+    dest: "{{ nextcloud_ldaps_config }}"
+    mode: 0644
+    backup: yes
+
+- name: copy ca certificates for ldaps
+  copy:
+    src: "{{ item }}"
+    dest: "{{ nextcloud_ldaps_tls_cacertdir }}"
+  with_items:
+    - "{{ nextcloud_ldaps_ca_certificates }}"
