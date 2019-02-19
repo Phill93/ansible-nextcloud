@@ -1,16 +1,17 @@
 ---
-  - name: Check Memory Cache
-    shell: "{{ nextcloud_memorycache_check_cmd}}"
-    become: true
-    register: memcache
-    ignore_errors: yes
+- name: Check Memory Cache
+  shell: "{{ nextcloud_memorycache_check_cmd}}"
+  become: true
+  register: memcache
+  ignore_errors: yes
 
-  - name: Enable APC Memory Cache
-    shell: "{{ nextcloud_memorycache_enable_apc_cmd }}"
-    become: true
-    when: nextcloud_memcache == "APC" and installed.stat.exists == True and memcache.stdout != "\\OC\\Memcache\\APC"
+- name: Enable APC Memory Cache
+  shell: "{{ nextcloud_memorycache_enable_apc_cmd }}"
+  become: true
+  when: nextcloud_memcache == "APC" and installed.stat.exists == True and memcache.stdout != "\\OC\\Memcache\\APC"
 
-  - name: Enable APCu Memory Cache
-    shell: "{{ nextcloud_memorycache_enable_apcu_cmd }}"
-    become: true
-    when: nextcloud_memcache == "APCu" and installed.stat.exists == True  and memcache.stdout != "\\OC\\Memcache\\APCu"
+- name: Enable APCu Memory Cache
+  shell: "{{ nextcloud_memorycache_enable_apcu_cmd }}"
+  become: true
+  when: nextcloud_memcache == "APCu" and installed.stat.exists == True  and memcache.stdout != "\\OC\\Memcache\\APCu"
+

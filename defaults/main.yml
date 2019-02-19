@@ -1,36 +1,36 @@
 ---
 # defaults file for nextcloud
 
-  # Nextcloud database configuration (Currently only SQLlite and MySQL ist )
-  nextcloud_database_type: "sqlite"
-  nextcloud_database_name: "nextcloud"
-  nextcloud_database_host: "localhost"
-  nextcloud_database_user: "root"
-  nextcloud_database_pass: ""
-  nextcloud_database_prefix: "oc_"
+# Nextcloud database configuration (Currently only SQLlite and MySQL ist )
+nextcloud_database_type: "sqlite"
+nextcloud_database_name: "nextcloud"
+nextcloud_database_host: "localhost"
+nextcloud_database_user: "root"
+nextcloud_database_pass: ""
+nextcloud_database_prefix: "oc_"
 
-  nextcloud_webserver_deamon: apache2
-  
-  # Nextcloud admin user data
-  nextcloud_admin_name: "admin"
-  nextcloud_admin_pass: "admin"
+nextcloud_webserver_deamon: apache2
 
-  # Nextcloud folders
-  nextcloud_extract_dir: "/var/www"
-  nextcloud_data_dir: "{{ nextcloud_install_dir }}/data"
+# Nextcloud admin user data
+nextcloud_admin_name: "admin"
+nextcloud_admin_pass: "admin"
 
-  # Nextcloud Memory Cache (Currently only APC and APCu is Supported)
-  nextcloud_memcache: "APCu"
+# Nextcloud folders
+nextcloud_extract_dir: "/var/www"
+nextcloud_data_dir: "{{ nextcloud_install_dir }}/data"
 
-  # Nextcloud download
-  nextcloud_version: "13.0.5"
+# Nextcloud Memory Cache (Currently only APC and APCu is Supported)
+nextcloud_memcache: "APCu"
 
-  # Webserver owner
-  nextcloud_http_user: "www-data"
-  nextcloud_http_group: "www-data"
+# Nextcloud download
+nextcloud_version: "13.0.5"
 
-  nextcloud_cron: True
+# Webserver owner
+nextcloud_http_user: "www-data"
+nextcloud_http_group: "www-data"
 
-  nextcloud_trusted_domains:
-    - "localhost"
-    - "{{ ansible_fqdn }}"
+nextcloud_cron: True
+
+nextcloud_trusted_domains:
+  - "localhost"
+  - "{{ ansible_fqdn }}"
