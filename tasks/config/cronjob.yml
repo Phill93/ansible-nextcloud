@@ -11,5 +11,6 @@
 - name: Set Cron method to Crontab
   shell: "{{ nextcloud_cron_en_cmd }}"
   become: true
+  become_user: "{{ nextcloud_http_user }}"
   when: nextcloud_cron == True
 

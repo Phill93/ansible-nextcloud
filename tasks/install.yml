@@ -1,11 +1,9 @@
 ---
 - name: Install required packages
   apt:
-    name: "{{ item }}"
+    name: "{{ nextcloud_php_modules }}"
     state: present
     update-cache: yes
-  with_items:
-    "{{ nextcloud_php_modules }}"
   notify: restart webserver
 
 - name: Check if Installed
@@ -77,14 +75,14 @@
   file:
     path: "{{ nextcloud_install_dir }}/.htaccess"
     mode: 0644
-    owner: "root"
+    owner: "{{ nextcloud_http_user }}"
     group: "{{ nextcloud_http_group }}"
 
 - name: Setting data folder .htaccess permissions if exist
   file:
     path: "{{ nextcloud_data_dir }}/.htaccess"
     mode: 0644
-    owner: "root"
+    owner: "{{ nextcloud_http_user }}"
     group: "{{ nextcloud_http_group }}"
   ignore_errors: yes
 
@@ -98,6 +96,7 @@
 - name: Use occ to install Nextcloud
   shell: "{{ nextcloud_install_cmd }}"
   become: true
+  become_user: "{{ nextcloud_http_user }}"
   when: installed.stat.exists == False
 
 - name: Check if Installed
