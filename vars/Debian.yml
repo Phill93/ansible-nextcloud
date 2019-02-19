@@ -18,3 +18,4 @@ nextcloud_php_modules:
   - "php7.0-mbstring"
   - "php7.0-imagick"
   - "libav-tools"
+

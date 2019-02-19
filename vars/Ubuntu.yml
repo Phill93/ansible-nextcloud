@@ -18,3 +18,4 @@ nextcloud_php_modules:
   - "php7.2-mbstring"
   - "php-imagick"
   - "ffmpeg"
+

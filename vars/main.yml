@@ -1,24 +1,23 @@
 ---
-  # vars file for nextcloud
-  nextcloud_archive_name: "nextcloud-{{ nextcloud_version }}.tar.bz2"
-  nextcloud_download_url: "https://download.nextcloud.com/server/releases/{{ nextcloud_archive_name }}"
-  nextcloud_install_dir: "{{ nextcloud_extract_dir }}/nextcloud"
-  nextcloud_data_dir: "{{ nextcloud_install_dir }}/data"
-  nextcloud_database_host: "127.0.0.1"
-  nextcloud_database_port: "3306"
-  # Nextcloud folders
-  nextcloud_folders:
-    - "apps"
-    - "assets"
-    - "config"
-    - "themes"
-    - "updater"
+# vars file for nextcloud
+nextcloud_archive_name: "nextcloud-{{ nextcloud_version }}.tar.bz2"
+nextcloud_download_url: "https://download.nextcloud.com/server/releases/{{ nextcloud_archive_name }}"
+nextcloud_install_dir: "{{ nextcloud_extract_dir }}/nextcloud"
+nextcloud_data_dir: "{{ nextcloud_install_dir }}/data"
+nextcloud_database_host: "127.0.0.1"
+nextcloud_database_port: "3306"
+# Nextcloud folders
+nextcloud_folders:
+  - "apps"
+  - "assets"
+  - "config"
+  - "themes"
+  - "updater"
+nextcloud_install_cmd: "chdir={{ nextcloud_install_dir }} php occ  maintenance:install --database \"{{ nextcloud_database_type }}\" --database-name \"{{ nextcloud_database_name }}\" --database-host \"{{ nextcloud_database_host }}\" --database-user \"{{ nextcloud_database_user }}\" --database-pass \"{{ nextcloud_database_pass }}\" --database_table-prefix \"{{ nextcloud_database_prefix }}\" --admin-user \"{{ nextcloud_admin_name }}\" --admin-pass \"{{ nextcloud_admin_pass }}\" --data-dir \"{{ nextcloud_data_dir }}\""
+nextcloud_memorycache_check_cmd: "chdir={{ nextcloud_install_dir }} php occ config:system:get memcache.local"
+nextcloud_memorycache_enable_apc_cmd: "chdir={{ nextcloud_install_dir }} php occ config:system:set memcache.local --value=\"\\OC\\Memcache\\APC\""
+nextcloud_memorycache_enable_apcu_cmd: "chdir={{ nextcloud_install_dir }} php occ config:system:set memcache.local --value=\"\\OC\\Memcache\\APCu\""
+nextcloud_set_trusted_dom_cmd: "chdir={{ nextcloud_install_dir }} php occ config:system:set trusted_domains {{ item.0 }} --value=\"{{ item.1 }}\""
+nextcloud_cron_en_cmd: "chdir={{ nextcloud_install_dir }} php occ background:cron"
+nextcloud_cron_cmd: "php {{ nextcloud_install_dir }}/cron.php"
 
-  nextcloud_switch_user: "su {{ nextcloud_http_user }} -s /bin/sh -c "
-  nextcloud_install_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ maintenance:install --database=\"{{ nextcloud_database_type }}\" --database-name=\"{{ nextcloud_database_name}}\" --database-host=\"{{ nextcloud_database_host }}\" --database-port=\"{{ nextcloud_database_port }}\" --database-user=\"{{ nextcloud_database_user }}\" --database-pass=\"{{ nextcloud_database_pass }}\" --database-table-prefix=\"{{ nextcloud_database_prefix }}\" --admin-user=\"{{ nextcloud_admin_name }}\" --admin-pass=\"{{ nextcloud_admin_pass }}\" --data-dir=\"{{ nextcloud_data_dir }}\" --no-interaction'"
-  nextcloud_memorycache_check_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ config:system:get memcache.local'"
-  nextcloud_memorycache_enable_apc_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ config:system:set memcache.local --value=\"\\OC\\Memcache\\APC\"'"
-  nextcloud_memorycache_enable_apcu_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ config:system:set memcache.local --value=\"\\OC\\Memcache\\APCu\"'"
-  nextcloud_set_trusted_dom_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ config:system:set trusted_domains {{ item.0 }} --value=\"{{ item.1 }}\"'"
-  nextcloud_cron_en_cmd: "{{ nextcloud_switch_user }} 'php {{ nextcloud_install_dir }}/occ background:cron'"
-  nextcloud_cron_cmd: "php {{ nextcloud_install_dir }}/cron.php"

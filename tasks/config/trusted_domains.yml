@@ -1,5 +1,7 @@
 ---
-    - name: Set Trusted Domains
-      shell: "{{ nextcloud_set_trusted_dom_cmd }}"
-      become: true
-      with_indexed_items: "{{ nextcloud_trusted_domains }}"
+- name: Set Trusted Domains
+  shell: "{{ nextcloud_set_trusted_dom_cmd }}"
+  become: true
+  become_user: "{{ nextcloud_http_user }}"
+  with_indexed_items: "{{ nextcloud_trusted_domains }}"
+

@@ -1,14 +1,15 @@
 ---
 # tasks file for nextcloud
-  - name: Include OS-specific variables.
-    include_vars: "{{ ansible_distribution }}.yml"
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_distribution }}.yml"
 
-  - include_tasks: install.yml
+- include_tasks: install.yml
 
-  - include_tasks: config/memory_cache.yml
-    when: nextcloud_memcache is defined
+- include_tasks: config/memory_cache.yml
+  when: nextcloud_memcache is defined
 
-  - include_tasks: config/trusted_domains.yml
+- include_tasks: config/trusted_domains.yml
 
-  - include_tasks: config/cronjob.yml
-    when: nextcloud_cron == True
+- include_tasks: config/cronjob.yml
+  when: nextcloud_cron == True
+
